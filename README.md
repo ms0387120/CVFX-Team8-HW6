@@ -1,7 +1,7 @@
 # CVFX-Team8-HW6
 
 1. 5% (Take videos by yourselves)
-錄製一段打保齡球的影片
+* 錄製一段Youtube上的打保齡球影片
 [![](http://img.youtube.com/vi/25zuljElHyM/0.jpg)](http://www.youtube.com/watch?v=25zuljElHyM "")
 2. 10% (Make these visual effects with ORB-SLAM2)
 3. 10% (Make these visual effects with any post-production software)
