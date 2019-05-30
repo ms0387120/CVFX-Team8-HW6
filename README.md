@@ -6,7 +6,7 @@
 * 使用軟體：MAKAR
 * 介紹：MAKAR是一個創建AR/VR編輯平台，具有簡單的編輯介面及內建模組功能。
 * 步驟 1：先拍鍵盤作為實境中的辨識圖(其中發現所選擇的辨識圖要越複雜辨識出來的效果越好)
-![](https://imgur.com/uForEDM.jpg)
+![](https://imgur.com/j6iZzwY.jpg)
 * 步驟 2：在場景中建立 3D model(我們插入一顆黃色球體)
 * 步驟 3：與裝置做連結，開啟鏡頭搜尋辨識圖，讓黃色球體在現實場景中有類似保齡球的效果。
 [![](http://img.youtube.com/vi/CFwSNMSKeWw/0.jpg)](http://www.youtube.com/watch?v=CFwSNMSKeWw "")
