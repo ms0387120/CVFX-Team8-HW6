@@ -13,7 +13,7 @@
 
 ---
 ## 2. Visual effects with ORB-SLAM2
-### 1. 建制 ORB_SLAM2 環境
+### 1. 建置 ORB_SLAM2 環境
 * [ORB_SLAM2 環境教學](https://github.com/cvfx-2019/homework6-Match-Moving-SLAM)
 
     - OS: linux
@@ -87,7 +87,7 @@
 
     - 計算每個keyframe間的變化量
     - 透過 scale 在時間內去移動物件
-    - 以x-axis為例，假設下一個keyFrame是0.5s後, 那麼 $x +=scale*(x2-x1)/fps/0.5$
+    - 以x-axis為例，假設下一個keyFrame是0.5s後, 那麼 x +=scale*(x2-x1)/fps/0.5
     - scale越大，移動的速度越快
     - 保齡球會根據新的x跟y，在每個frame插入一個保齡球的圖片
     - 最後用程式把圖片們合成影片
