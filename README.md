@@ -24,15 +24,11 @@
     - DBoW2
     - g2o
 
-### 2. 影片轉換成圖像
+### 2. 影片轉換成圖像 & 生成運行時需要的文本
 * 將影片轉換成一幀幀的圖片
 
-    - 程式語言：Python
     - 八秒的影片生成 267 張圖片
 
-### 3. 生成運行時需要的文本
-
-* 程式語言：Python
 * **表示圖片集的內容** 
 
     - rgb.txt
@@ -54,7 +50,7 @@
 ```
 * [相關教學](https://github.com/raulmur/ORB_SLAM2/issues/486?fbclid=IwAR0bdntViLgx1YlJ2x9FrEwb5mE_R9HH6L1ikugzJVk8hl67Ty11lLS4Mkw)
 
-### 4. 運行 ORB_SLAM2
+### 3. 運行 ORB_SLAM2
 * 運行時，影片對應的SLAM
 
 | 圖片 | ![](https://i.imgur.com/3Dc3krs.png)| ![](https://i.imgur.com/cYzxNX1.png)|
@@ -64,7 +60,8 @@
 * **得到攝影機移動時的座標相對位置**
 
     * KeyFrameTrajectory.txt
-    * 內容為 Timestamp、x、y、z、dx、dy、dz、dw
+    * 內容為 Timestamp、x、y、z、q_x、q_y、q_z、q_w
+
     * 生成範例如下：
 ```
 0.000000 0.0000000 0.0000000 0.0000000 0.0000000 0.0000000 0.0000000 1.0000000
@@ -74,7 +71,7 @@
 ...
 ```
 
-### 5. 插入物件
+### 4. 插入物件
 * 根據攝影機移動的座標位置資料來適當插入物件
 * 使用兩種方法實作
 
@@ -83,14 +80,15 @@
 | 工具    | Python     | Unity     |
 | 結果    | [![](http://img.youtube.com/vi/GM3poc79PtM/0.jpg)](http://www.youtube.com/watch?v=GM3poc79PtM "")     | [![](http://img.youtube.com/vi/Q1jj5DnL8so/0.jpg)](http://www.youtube.com/watch?v=Q1jj5DnL8so "")    |
 
-### 6-1.討論 Python 法
+### 5-1.討論 Python 法
 * 作法：
 
-    - 計算每個keyframe間的變化量
-    - 透過 scale 在時間內去移動物件
-    - 以x-axis為例，假設下一個keyFrame是0.5s後, 那麼 x +=scale*(x2-x1)/fps/0.5
+    - 每次到達新的keyFrame會計算離下個keyframe間的變化量
+    - 每次frame會根據之前計算的keyFrame間變化量更新x, y
+    - 以x-axis為例，假設下一個keyFrame是0.5s後, 那麼x -=scale*(x2-x1)/fps/0.5，直到達到下一個keyFrame
+       p.s. 由於(x2-x1)是相機移動的方向，因此在圖片中應該是要往反方向進行
     - scale越大，移動的速度越快
-    - 保齡球會根據新的x跟y，在每個frame插入一個保齡球的圖片
+    - 會根據新的x跟y，在每個frame插入一個保齡球的圖片
     - 最後用程式把圖片們合成影片
 
 * **前期看起來很正常，鏡頭往右的時候，保齡球一樣留在左邊。但後期卻整個亂掉**
@@ -100,18 +98,18 @@
     - Scale 參數
 
         - 根據 KeyFrameTrajectory 得出的相對座標資料，在 pixel 計算上沒有一定的公式可得出，必須透過不斷的實驗，才能 tune 好 scale
-    - ORB_SLAM2 沒做好
+    - ORB_SLAM2 沒做好，也沒考慮到鏡頭參數的調整
+    - 沒有考慮z-axis and Quaternion
 
-
-### 6-2.討論 Unity 法
+### 5-2.討論 Unity 法
 * 作法：
-
-    - 用unity可以調整x,y,z軸的相對移動距離來調整虛擬的camera
-    - 把我們的演算法套在camera上，讓camera照著trajectory跑
+    - 把原始影片插在Unity背景裡，不會隨camera角度、位置移動而有變化
+    - Insert a 3D object, Shpere
+    - 然後寫script根據trajectory file使Unity camera的x、y、z軸和Quaternion角度隨時間連續性移動(Lerp)，藉此模擬真實鏡頭的位置和角度
 
 * 跟上個方法相比，效果略好點，但中間的時候還是略有跑掉
 * 偏掉的原因可能是trajectory的資料可能沒那麼準確
-
+* unity camera的視野與我們實際上拍攝影片的鏡頭有差異
 
 ---
 ## 3. Visual effects with any post-production software
@@ -148,7 +146,8 @@
 * ORB_SLAM2_Python
     
     - 優點
-    
+        - 實作方法簡單、直觀，Python也好寫
+        - 需要調整的參數只有一個而且算直觀
         - 不用下載很肥的Unity或後製軟體，即可簡單達到所需效果
     - 缺點
 
@@ -158,11 +157,11 @@
     
     - 優點
     
-        - 有虛擬相機調整xyz軸的相對變動
+        - 有虛擬相機調整xyz軸的相對變動，概念上比較簡單
         - 在插入物件時，使用上比 Python 找 Pixel 直觀
     - 缺點
-
-        - 需要上手此軟體的操作
+        - 實際拍攝所用的鏡頭與Unity camera並不完全相同，要調整有難度、不直覺
+        - 需要上手此軟體的操作、C#沒python方便
         - 需要好的硬體執行，才不容易當機或卡卡的
 
 * SLAM_MAKAR
