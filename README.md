@@ -88,9 +88,26 @@
     - 以x-axis為例，假設下一個keyFrame是0.5s後, 那麼x -=scale*(x2-x1)/fps/0.5，直到達到下一個keyFrame
        p.s. 由於(x2-x1)是相機移動的方向，因此在圖片中應該是要往反方向進行
     - scale越大，移動的速度越快
-    - 會根據新的x跟y，在每個frame插入一個保齡球的圖片
+    - 會根據新的x跟y，在每個frame插入一個保齡球的圖片(2D)
     - 最後用程式把圖片們合成影片
-
+* 部分演算法code：
+```
+for filename in lst:
+    img = cv2.imread('./rgb/'+filename)
+    img = cv2.cvtColor(img, cv2.COLOR_RGB2RGBA)
+    if name2key('rgb/'+filename)==nextKeyFrame: #reach next key frame
+        key += 1
+        nextKeyFrame = keyFrame["time"][key] #update next key frame
+        deltaTime = keyFrame["time"][key] - keyFrame["time"][key-1]
+        xd = int((keyFrame['x'][key]-keyFrame['x'][key-1]) * scale_x /30 / deltaTime)
+        yd = int((keyFrame['y'][key]-keyFrame['y'][key-1]) * scale_y /30 / deltaTime)
+    
+    x -= xd
+    y -= yd
+    
+    #insert bowling ball base on x, y
+    ......
+```
 * **前期看起來很正常，鏡頭往右的時候，保齡球一樣留在左邊。但後期卻整個亂掉**
 
 * 影片結果顯示物件很容易偏掉，可能原因如下：
