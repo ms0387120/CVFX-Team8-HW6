@@ -122,11 +122,12 @@ for filename in lst:
 * 作法：
     - 把原始影片插在Unity背景裡，不會隨camera角度、位置移動而有變化
     - Insert a 3D object, Shpere
-    - 然後寫script根據trajectory file使Unity camera的x、y、z軸和Quaternion角度隨時間連續性移動(Lerp)，藉此模擬真實鏡頭的位置和角度
-
+    - 然後寫script根據trajectory file使Unity camera的x、y、z軸和Quaternion角度隨時間連續性移動(Lerp)，藉此模擬真實鏡頭的位置和角度。[相關教學](https://stackoverflow.com/questions/36850253/move-gameobject-over-time)
+      
 * 跟上個方法相比，效果略好點，但中間的時候還是略有跑掉
 * 偏掉的原因可能是trajectory的資料可能沒那麼準確
 * unity camera的視野與我們實際上拍攝影片的鏡頭有差異
+
 
 ---
 ## 3. Visual effects with any post-production software
